@@ -1,0 +1,190 @@
+/**********************
+******** General ******
+***********************/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    background-color: #444;
+    font-family: Open Sans;
+    font-size: 16px;
+    position: relative;
+    height: 100vh;
+    font-weight: 1000;
+}
+
+a {
+    /* block hyperlink style (color blue & underline) */
+    text-decoration: none;
+    color: #ddd;
+}
+
+/**********************
+******** Header *******
+***********************/
+
+header {
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+    background: white;
+    color: black;
+}
+
+.page-title {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 4vw;
+    text-align: center;
+    border-bottom: 1px solid green;
+}
+
+.page-subtitle {
+    margin-top: 1vh;
+    font-size: 2vw;
+    text-align: center;
+}
+
+.container-numbers_selected {
+    margin-top: 2vh;
+    margin-left: auto;
+    margin-right: auto;
+    background: grey;
+    width: 74vw;
+}
+.numbers_selected {
+    display: inline-block;
+    width: 8vw;
+    height: 8vw;
+    border-radius: 4vw;
+    background: white;
+    margin-left: 2vw;
+    margin-right: 2vw;
+    font-size: 2vw;
+    color: purple;
+    text-align: center;
+    line-height: 8vw;
+}
+
+/**********************
+******** Overlay ******
+***********************/
+
+.overlay {
+    display: block;
+    position: absolute;
+    left: 2vw;
+    right: 2vw;
+    bottom: 3vh;
+    width: 96vw;
+    height: 54vh;
+    background: rgba(255, 255, 255, 0.9);
+    /* cursor: pointer; Add a pointer on hover */
+    transition: all 0.3s ease-out;
+}
+
+.hiding {
+    height: 0;
+    opacity: 0;
+    /* bottom: 3vh; */
+}
+
+.overlay_title {
+    text-align: center;
+}
+
+.overlay_container-numbers {
+    margin-top: 2vh;
+    margin-left: auto;
+    margin-right: auto;
+    
+    width: 96vw;
+    height: 6vw;
+}
+
+.number_buttons {
+    display: inline-block;
+    width: 6vw;
+    height: 6vw;
+    border-radius: 4vw;
+    margin-left: 1.6vw;
+    margin-right: 1.6vw;
+    font-size: 2vw;
+    text-align: center;
+    line-height: 6vw;
+}
+
+.first_row { background: #F1C40F; }
+.second_row { background: #2980B9; }
+.third_row { background: #C0392B; }
+.fourth_row { background: #BDC3C7; }
+.fifth_row { background: #27AE60; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* .numbers-selected:nth-child(2),
+.numbers-selected:nth-child(3),
+.numbers-selected:nth-child(4),
+.numbers-selected:nth-child(5),
+.numbers-selected:nth-child(6) {
+    margin-left: 4vw;
+} */
+
+/* header {
+    background-color: #777;
+}
+
+header h2 {
+    font-size: 2rem;
+    padding-top: 1rem;
+    padding-left: 2rem;
+    padding-bottom: 1rem;
+}
+
+header .nav-bar {
+    font-size: 1rem;
+    position: absolute;
+    right: 2rem;
+    top: 2.5rem;
+}
+
+header .nav-bar li {
+    list-style-type: none;
+    float: left;
+    margin-left: 2rem;
+    transition: all 0.4s ease-in-out;
+}
+
+header .nav-bar li:hover {
+    font-size: 1.5rem;
+}
+
+.site-owner {
+    font-size: 4rem;
+    position: absolute;
+    left: 16rem;
+    top: 12rem;
+}
+
+.owner-description {
+    font-size: 1rem;
+    position: absolute;
+    top: 10rem;
+    right: 16rem;
+} */

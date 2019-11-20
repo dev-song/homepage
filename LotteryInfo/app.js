@@ -6,10 +6,14 @@ var nodeListForEach = function(list, callback) {
     }
 };
 
-// Selection Controller
-var selectionController = (function() {
+// Numbers Controller
+var numbersController = (function() {
 
     var numberSelection = [];
+    var latestDrawNumber = [4, 14, 23, 28, 37, 45, 17];
+    // https://www.dhlottery.co.kr/gameResult.do?method=byWin
+    var numberSame = [];
+    var numberDifferent = [];
 
     return {
         addSelection: function(number) {
@@ -33,9 +37,45 @@ var selectionController = (function() {
 
         getSelection: function() {
             return numberSelection;
+        },
+
+        getDrawNumbers: function() {
+            return latestDrawNumber;
+        },
+
+        compareArray: function(arr1, arr2, arrSame, arrDiff) {
+            // arr1, arr2에서 동일한 값은 arrSame에, 다른 값은 arrDiff에 저장하는 함수
+    
+            arrSame = [];
+            arrDiff = [];
+    
+            // arr2를 arrDiff에 복사
+            arrDiff = arr2.slice();
+            
+            // arr1[i]와 arr2[j]가 같을 때 값을 arrSame에 추가하고 arrDiff에서 제외
+            for (var i = 0; i < arr1.length; i++) {
+                for (var j = 0; j < arr2.length; j++) {
+                    if (arr1[i] === arr2[j]) {
+                        arrSame.push(arr1[i]);
+                        arrDiff.splice(arrDiff.indexOf(arr1[i]), 1);
+                    }
+                }
+            };
+    
+            return {
+                arrSame,
+                arrDiff
+            }
+        },
+
+        getSameNumbers: function() {
+            return numberSame;
+        },
+
+        getDifferentNumbers: function() {
+            return numberDifferent;
         }
     }
-
 })();
 
 
@@ -103,7 +143,7 @@ var UIController = (function() {
 
 
 // Global controller
-var controller = (function(selectionCtrl, UICtrl) {
+var controller = (function(numbersCtrl, UICtrl) {
 
     var setupEventListeners = function() {
         // 버튼 클릭 시 Event Listener 추가하는 함수
@@ -123,27 +163,33 @@ var controller = (function(selectionCtrl, UICtrl) {
 
     var updateSelection = function() {
         // 1. Sort the number selection
-        selectionCtrl.sortSelection();
+        numbersCtrl.sortSelection();
         // 2. Return the selection
-        var selection = selectionCtrl.getSelection();
+        var selection = numbersCtrl.getSelection();
         // 3. Display the selection to the UI
         UICtrl.displaySelection(selection);
     }
 
     var ctrlAddSelection = function(event) {
-        // 클릭한 버튼의 숫자와 selectionController의 addSelection 함수를 연결
+        // 클릭한 버튼의 숫자와 numbersController의 addSelection 함수를 연결
         // 6개 넘게 선택하려고 할 때 오류메시지 출력
-        var inputNumber, numSelection;
+        var inputNumber, numSelection, drawNumbers;
 
         inputNumber = parseInt(event.target.textContent);
         // console.log(inputNumber);
-        numSelection = selectionController.getSelection();
+        numSelection = numbersCtrl.getSelection();
+        drawNumbers = numbersCtrl.getDrawNumbers();
+        sameNumbers = numbersCtrl.getSameNumbers();
+        differentNumbers = numbersCtrl.getDifferentNumbers();
         
         if (numSelection.length < 6) {
-            selectionCtrl.addSelection(inputNumber);
+            numbersCtrl.addSelection(inputNumber);
             updateSelection();
         } else {
-            console.log('You has already selected all 6 numbers!')
+            console.log('You has already selected all 6 numbers!');
+            
+            var result = numbersCtrl.compareArray(numSelection, drawNumbers, sameNumbers, differentNumbers);
+            console.log(result);
         }
     };
 
@@ -154,7 +200,7 @@ var controller = (function(selectionCtrl, UICtrl) {
         }
     }
 
-})(selectionController, UIController);
+})(numbersController, UIController);
 
 controller.init();
 

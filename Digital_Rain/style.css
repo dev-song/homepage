@@ -1,0 +1,17 @@
+/* Color palette
+White: #FFFFFF
+Light Green: #68FC68
+Green: #0DD60D
+Dark Green: #004300
+Black: #000000
+*/
+
+body {
+    background-color: black;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.5rem;
+    color: #0DD60D;
+}
+
+
+

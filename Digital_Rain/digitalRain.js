@@ -9,21 +9,26 @@
     // 안 붙어있다면 row가 current가 붙은 row보다 작을 경우 초록색으로
     // 클 경우 검정색으로
 
+// 배열 내 무작위 항목을 선택하는 함수
+var getRndElem = function(arr) {
+    var rndElem;
+    rndElem = arr[Math.floor(Math.random() * arr.length)];
 
+    return rndElem;
+};
 
+// id를 가진 요소의 position에 html 코드를 더하는 함수
+// var insertHTML = function(id, position, html) {
+//     // position은 'beforebegin', 'afterbegin', 'beforeend', 'afterend'의 4가지
+//     document.getElementById(id).insertAdjacentHTML(position, html);
+// };
 
 var dataController = (function() {
     
     // 글자들의 전체 집합을 설정
     var characters = ["길", "벼", "흐", "오", "랖", "オ", "サ", "ホ", "モ", "ヤ", "b", "m", "Q", "R", "y", "δ", "ε", "θ", "ψ", "η", "Б", "Ж", "Л", "Ю", "Я", "ठ", "त", "थ", "म", "ह", "խ", "ծ", "ջ", "տ", "ֆ", "ᚠ", "ᚱ", "ᛉ", "ᛒ", "ᛗ"];
 
-    // 배열 내 무작위 항목을 선택하는 함수
-    var getRandomElement = function(arr) {
-        var randomElement;
-        randomElement = arr[Math.floor(Math.random() * arr.length)];
 
-        return randomElement;
-    };
 
     return {
         // Characters 배열을 return하는 함수
@@ -39,8 +44,8 @@ var dataController = (function() {
             attached = "";
             // attached에 무작위로 고른 항목들을 n번 더함
             for (var i = 0; i < n; i++) {
-                var randomElement = getRandomElement(arr);
-                attached += randomElement;
+                var rndElem = getRndElem(arr);
+                attached += rndElem;
             }
 
             return attached;
@@ -48,21 +53,52 @@ var dataController = (function() {
     }
 })();
 
-var UIController = function() {
+var UIController = (function() {
 
-    var DOMString = {
+    var DOMStrings = {
         
     };
 
-    var displayRndCharacters: function()
 
-};
 
-var appController = function(dataCtrl, UICtrl) {
+    return {
+        // 'row_n'의 클래스를 가진 DOM 개체의 textContent를 Characters로 표시
+        displayCharacters: function(n, char) {
+            document.querySelector('.row_' + n).textContent = char;
+        },
+        
+        // arr 배열에서 무작위 글자를 n개 추출해 이어붙인 문장을 m열 추가
+        getCharacterMatrix: function(arr, n, m) {
+            for (var i = 0; i < m; i++) {
+                var divClass = ' class="rows row_' + (i + 1);
+                var html = '<div' + divClass + '">';
+
+                for (var j = 0; j < n; j++) {
+                    var rndElem = getRndElem(arr);
+                    var spanClass = ' class="characters column_' + (j + 1) + '"';
+                    var spanId = ' id="r' + (i + 1) + 'c' + (j + 1);
+
+                    html += '<span' + spanClass + spanId + '">' + rndElem + '</span>';
+                }
+                html += '</div>';
+
+                // 'body' selector의 'beforeend' position에 html 삽입
+                document.querySelector('body').insertAdjacentHTML('beforeend', html);
+            }
+        }
+    }
+})();
+
+var appController = (function(dataCtrl, UICtrl) {
+
+    var characters = dataCtrl.getCharacters();
+    var randomArray = dataCtrl.arrRndAttachment(characters, 12);
 
     return {
         init: function() {
-
+            UICtrl.getCharacterMatrix(characters, 16, 16);
         }
     }
-}
+})(dataController, UIController);
+
+appController.init();

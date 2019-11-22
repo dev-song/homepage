@@ -9,9 +9,21 @@ Black: #000000
 body {
     background-color: black;
     font-family: 'Open Sans', sans-serif;
-    font-size: 1.5rem;
+    /* font-size: 1.5rem; */
     color: #0DD60D;
+    text-align: center;
 }
 
+.rows {
+    padding: auto;
+    margin: auto;
+}
 
+.characters {
+    display: inline-block;
+    width: 4vw;
+    margin: 1vw;
+    font-size: 2vw;
+    text-align: center;
+}
 

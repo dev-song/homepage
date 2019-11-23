@@ -59,12 +59,11 @@ var UIController = (function() {
         
     };
 
-
-
     return {
-        // 'row_n'의 클래스를 가진 DOM 개체의 textContent를 Characters로 표시
-        displayCharacters: function(n, char) {
-            document.querySelector('.row_' + n).textContent = char;
+        // r'row_n'c'col_m'의 id를 가진 DOM 개체의 textContent를 Char로 표시
+        displayCharacters: function(row_n, col_m, char) {
+            var elementId = '#r' + row_n + 'c' + col_m;
+            document.querySelector(elementId).textContent = char;
         },
         
         // arr 배열에서 무작위 글자를 n개 추출해 이어붙인 문장을 m열 추가
@@ -85,6 +84,80 @@ var UIController = (function() {
                 // 'body' selector의 'beforeend' position에 html 삽입
                 document.querySelector('body').insertAdjacentHTML('beforeend', html);
             }
+        },
+
+        // 총 m개의 column에 대해 각 column 별로 무작위 row의 요소에 .highlight 추가
+        setInitialHighlight: function(obj) {
+            // id = r#c1, r#c2, ..., r#c16 (#: 무작위 행 번호)
+
+            for (var i = 1; i <= obj.columns; i++) {
+                var rndRow = Math.floor(Math.random() * obj.rows + 1);
+                var rndId = 'r' + rndRow + 'c' + i;
+
+                document.getElementById(rndId).classList.add('highlighted');
+
+                // console.log(rndId + ' element is highlighted')
+            }
+        },
+
+        // 현재 highlight 된 요소의 아래요소로 highlight를 지정함
+        displayNewHighlight: function(obj) {
+            for (var i = 1; i <= obj.columns; i++) {
+                var previousHighlightId;
+                var newHighlightId;
+
+                for (var j = 1; j <= obj.rows; j++) {
+                    var targetId = 'r' + j + 'c' + i;
+                    var targetDOM = document.getElementById(targetId);
+
+                    if (targetDOM.classList.contains('highlighted') && j !== obj.rows) {
+                        previousHighlightId = targetId;
+                        newHighlightId = 'r' + (j + 1) + 'c' + i;
+                    } else if (targetDOM.classList.contains('highlighted') && j === obj.rows) {
+                        // 첫 column의 highlight가 j 행에 닿으면 오류를 뿜는 것을 막는 조건문
+                        // 미봉책
+                        previousHighlightId = 'r' + (j - 1) + 'c' + i;
+                        newHighlightId = targetId;
+                    }
+                }
+                
+                document.getElementById(previousHighlightId).classList.remove('highlighted');
+                document.getElementById(previousHighlightId).classList.add('darkened');
+                document.getElementById(newHighlightId).classList.remove('blacked');
+                document.getElementById(newHighlightId).classList.add('highlighted');
+
+
+            }
+            console.log('Change highlighted element');
+        },
+
+        // Element의 id를 확인하여 해당 column의 highlight된 행보다 위면 light green, 아래면 black
+        // 심화: highlight 행에서 위쪽으로 멀어질수록 dark green
+        ctrlElemColor: function(obj) {
+            // 매 열마다 어떤 행이 highlight 되었는지 감지하고 해당 row를 저장
+            for (var i = 1; i <= obj.columns; i++) {
+                for (var j = 1; j <= obj.rows; j++) {
+                    var targetId = 'r' + j + 'c' + i;
+                    var targetDOM = document.getElementById(targetId);
+
+                    if (targetDOM.classList.contains('highlighted')) {
+                        console.log('element with the ID of ' + targetId + ' is highlighted')
+
+                        // highlighted 위는 darkened
+                        for (var k = 1; k < j; k++) {
+                            var overId = 'r' + k + 'c' + i;
+                            document.getElementById(overId).classList.add('darkened');
+                        }
+
+                        // highlighted 아래는 black
+                        for (var l = j + 1; l <= obj.rows; l++) {
+                            var belowId = 'r' + l + 'c' + i;
+                            document.getElementById(belowId).classList.add('blacked');
+                        }
+                    }
+
+                }
+            }
         }
     }
 })();
@@ -92,13 +165,30 @@ var UIController = (function() {
 var appController = (function(dataCtrl, UICtrl) {
 
     var characters = dataCtrl.getCharacters();
-    var randomArray = dataCtrl.arrRndAttachment(characters, 12);
+    var characterMatrix = {
+        rows: 16,
+        columns: 16
+    }
+
+    var setEventListeners = function() {
+        document.querySelector('body').addEventListener('click', updateHighlight);
+    };
+
+    var updateHighlight = function() {
+        UICtrl.displayNewHighlight(characterMatrix);
+        // 
+
+    };
 
     return {
         init: function() {
             UICtrl.getCharacterMatrix(characters, 16, 16);
+            UICtrl.setInitialHighlight(characterMatrix);
+            UICtrl.ctrlElemColor(characterMatrix);
+
+            setEventListeners();
         }
-    }
+    };
 })(dataController, UIController);
 
 appController.init();

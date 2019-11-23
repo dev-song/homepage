@@ -10,7 +10,7 @@ body {
     background-color: black;
     font-family: 'Open Sans', sans-serif;
     /* font-size: 1.5rem; */
-    color: #0DD60D;
+    color: #004300;
     text-align: center;
 }
 
@@ -27,3 +27,14 @@ body {
     text-align: center;
 }
 
+.highlighted {
+    color: #68FC68;
+}
+
+.darkened {
+    color: #004300;
+}
+
+.blacked {
+    color: #000000;
+}

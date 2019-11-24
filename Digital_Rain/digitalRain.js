@@ -9,6 +9,8 @@
     // 안 붙어있다면 row가 current가 붙은 row보다 작을 경우 초록색으로
     // 클 경우 검정색으로
 
+var playing;
+
 // 배열 내 무작위 항목을 선택하는 함수
 var getRndElem = function(arr) {
     var rndElem;
@@ -49,6 +51,28 @@ var dataController = (function() {
             }
 
             return attached;
+        },
+        
+        // arr 배열에서 무작위 글자를 n개 추출해 이어붙인 문장을 m열 추가
+        getCharacterMatrix: function(arr, obj) {
+            for (var i = 0; i < obj.rows; i++) {
+                var divClass = ' class="rows row_' + (i + 1);
+                var html = '<div' + divClass + '">';
+
+                for (var j = 0; j < obj.columns; j++) {
+                    var rndElem = getRndElem(arr);
+                    var spanClass = ' class="characters column_' + (j + 1) + '"';
+                    var spanId = ' id="r' + (i + 1) + 'c' + (j + 1);
+
+                    html += '<span' + spanClass + spanId + '">' + rndElem + '</span>';
+                }
+                html += '</div>';
+
+                // 'body' selector의 'beforeend' position에 html 삽입
+                document.querySelector('body').insertAdjacentHTML('beforeend', html);
+            }
+
+            return html;
         }
     }
 })();
@@ -64,26 +88,6 @@ var UIController = (function() {
         displayCharacters: function(row_n, col_m, char) {
             var elementId = '#r' + row_n + 'c' + col_m;
             document.querySelector(elementId).textContent = char;
-        },
-        
-        // arr 배열에서 무작위 글자를 n개 추출해 이어붙인 문장을 m열 추가
-        getCharacterMatrix: function(arr, n, m) {
-            for (var i = 0; i < m; i++) {
-                var divClass = ' class="rows row_' + (i + 1);
-                var html = '<div' + divClass + '">';
-
-                for (var j = 0; j < n; j++) {
-                    var rndElem = getRndElem(arr);
-                    var spanClass = ' class="characters column_' + (j + 1) + '"';
-                    var spanId = ' id="r' + (i + 1) + 'c' + (j + 1);
-
-                    html += '<span' + spanClass + spanId + '">' + rndElem + '</span>';
-                }
-                html += '</div>';
-
-                // 'body' selector의 'beforeend' position에 html 삽입
-                document.querySelector('body').insertAdjacentHTML('beforeend', html);
-            }
         },
 
         // 총 m개의 column에 대해 각 column 별로 무작위 row의 요소에 .highlight 추가
@@ -114,48 +118,62 @@ var UIController = (function() {
                         previousHighlightId = targetId;
                         newHighlightId = 'r' + (j + 1) + 'c' + i;
                     } else if (targetDOM.classList.contains('highlighted') && j === obj.rows) {
-                        // 첫 column의 highlight가 j 행에 닿으면 오류를 뿜는 것을 막는 조건문
-                        // 미봉책
-                        previousHighlightId = 'r' + (j - 1) + 'c' + i;
-                        newHighlightId = targetId;
+                        // 각 column의 highlight된 row가 최하단이 되면 newHighlight를 1행으로 돌리는 조건문
+                        previousHighlightId = targetId;
+                        newHighlightId = 'r' + 1 + 'c' + i;
                     }
-                }
+                };
                 
                 document.getElementById(previousHighlightId).classList.remove('highlighted');
-                document.getElementById(previousHighlightId).classList.add('darkened');
-                document.getElementById(newHighlightId).classList.remove('blacked');
                 document.getElementById(newHighlightId).classList.add('highlighted');
 
-
+                // console.log('element with the ID of ' + newHighlightId + ' is highlighted')
             }
             console.log('Change highlighted element');
         },
 
-        // Element의 id를 확인하여 해당 column의 highlight된 행보다 위면 light green, 아래면 black
-        // 심화: highlight 행에서 위쪽으로 멀어질수록 dark green
+        // Column 별로 element의 id를 확인하고, highlight된 행보다 위는 밝게, 아래는 어둡게 하는 함수
         ctrlElemColor: function(obj) {
-            // 매 열마다 어떤 행이 highlight 되었는지 감지하고 해당 row를 저장
             for (var i = 1; i <= obj.columns; i++) {
                 for (var j = 1; j <= obj.rows; j++) {
                     var targetId = 'r' + j + 'c' + i;
                     var targetDOM = document.getElementById(targetId);
 
                     if (targetDOM.classList.contains('highlighted')) {
-                        console.log('element with the ID of ' + targetId + ' is highlighted')
 
-                        // highlighted 위는 darkened
-                        for (var k = 1; k < j; k++) {
+                        var colorClass = ['green_black', 'green_dark', 'green', 'green_light', 'green_white', 'black'];
+
+                        // highlighted 요소가 가리지 않도록 다른 클래스는 제외
+                        colorClass.forEach(function(val) {
+                            targetDOM.classList.remove(val);
+                        });
+
+                        // highlighted 요소로부터 거리에 따라 클래스 추가
+                        for (var k = 1; k <= obj.rows; k++) {
                             var overId = 'r' + k + 'c' + i;
-                            document.getElementById(overId).classList.add('darkened');
-                        }
 
-                        // highlighted 아래는 black
-                        for (var l = j + 1; l <= obj.rows; l++) {
-                            var belowId = 'r' + l + 'c' + i;
-                            document.getElementById(belowId).classList.add('blacked');
+                            // 클래스 추가 전 다른 클래스 제외
+                            colorClass.forEach(function(val) {
+                                document.getElementById(overId).classList.remove(val);
+                            });
+
+                            if (k < j - 13) {
+                                document.getElementById(overId).classList.add('black');
+                            } else if (k < j - 11) {
+                                document.getElementById(overId).classList.add('green_black');
+                            } else if (k < j - 9) {
+                                document.getElementById(overId).classList.add('green_dark');
+                            } else if (k < j - 6) {
+                                document.getElementById(overId).classList.add('green');
+                            } else if (k < j - 3) {
+                                document.getElementById(overId).classList.add('green_light');
+                            } else if (k < j) {
+                                document.getElementById(overId).classList.add('green_white');
+                            } else if (k > j) {
+                                document.getElementById(overId).classList.add('black');
+                            }
                         }
                     }
-
                 }
             }
         }
@@ -164,29 +182,48 @@ var UIController = (function() {
 
 var appController = (function(dataCtrl, UICtrl) {
 
+    var playing = false;
+
     var characters = dataCtrl.getCharacters();
     var characterMatrix = {
-        rows: 16,
+        rows: 24,
         columns: 16
     }
 
     var setEventListeners = function() {
+        document.getElementById('btn_play-stop').addEventListener('click', playOnOff);
         document.querySelector('body').addEventListener('click', updateHighlight);
+    };
+
+    var playOnOff = function() {
+        playing === true ? playing = false : playing = true;
+        console.log('play status changed; now playing: ' + playing);
+    };
+
+    var setCharacterMatrix = function(element, position) {
+        var html = dataController.getCharacterMatrix(characters, characterMatrix);
+
+        document.querySelector(element).insertAdjacentHTML(position, html);
     };
 
     var updateHighlight = function() {
         UICtrl.displayNewHighlight(characterMatrix);
-        // 
-
+        UICtrl.ctrlElemColor(characterMatrix);
     };
 
     return {
         init: function() {
-            UICtrl.getCharacterMatrix(characters, 16, 16);
+            setCharacterMatrix('body', 'beforeend');
             UICtrl.setInitialHighlight(characterMatrix);
             UICtrl.ctrlElemColor(characterMatrix);
 
+            // 200ms 간격으로 반복
+            setInterval(updateHighlight, 250);
+
             setEventListeners();
+        },
+
+        stop: function() {
         }
     };
 })(dataController, UIController);

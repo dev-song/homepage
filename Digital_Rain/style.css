@@ -1,8 +1,22 @@
 /* Color palette
+W3Schools.com HTML Color Picker
+https://www.w3schools.com/colors/colors_picker.asp
+
+Base color: #6699ff;
+
+--- lighter/darker ---
+100%: #ffffff;
+80%: #99ffbb;
+70%: Base Color;
+60%: #33ff77;
+40%: #00cc44;
+20%: #006622;
+10%: #003311;
+5%: #001a09;
+0%: #000000;
+
 White: #FFFFFF
-Light Green: #68FC68
-Green: #0DD60D
-Dark Green: #004300
+Green: #008000
 Black: #000000
 */
 
@@ -14,6 +28,25 @@ body {
     text-align: center;
 }
 
+.buttons {
+    background-color: #001a09;
+    padding-top: 0.2vw;
+    padding-bottom: 0.2vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border: none;
+    border-radius: 0.5vw;
+    color: #99ffbb;
+    font-size: 1.6vw;
+    text-align: center;
+    /* cursor: pointer; */
+}
+
+.buttons:hover {
+    background-color: #99ffbb;
+    color: #001a09;
+}
+
 .rows {
     padding: auto;
     margin: auto;
@@ -22,19 +55,45 @@ body {
 .characters {
     display: inline-block;
     width: 4vw;
-    margin: 1vw;
+    margin-top: 0.5vw;
+    margin-bottom: 0.5vw;
+    margin-left: 1vw;
+    margin-right: 1vw;
     font-size: 2vw;
     text-align: center;
 }
 
 .highlighted {
-    color: #68FC68;
+    /* light green */
+    color: #ffffff;
 }
 
-.darkened {
-    color: #004300;
+.green_black {
+    /* black green */
+    color: #003311;
 }
 
-.blacked {
-    color: #000000;
+.green_dark {
+    /* dark green */
+    color: #006622;
+}
+
+.green {
+    /* green */
+    color: #00cc44;
+}
+
+.green_light {
+    /* light green */
+    color: #33ff77;
+}
+
+.green_white {
+    /* white green */
+    color: #99ffbb;
+}
+
+.black {
+    /* black */
+    color: #001a09;
 }

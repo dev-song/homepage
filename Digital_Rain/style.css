@@ -24,7 +24,7 @@ body {
     background-color: black;
     font-family: 'Open Sans', sans-serif;
     /* font-size: 1.5rem; */
-    color: #004300;
+    color: #001a09;
     text-align: center;
 }
 
@@ -54,11 +54,11 @@ body {
 
 .characters {
     display: inline-block;
-    width: 4vw;
-    margin-top: 0.5vw;
-    margin-bottom: 0.5vw;
-    margin-left: 1vw;
-    margin-right: 1vw;
+    width: 3vw;
+    margin-top: 0.3vw;
+    margin-bottom: 0.3vw;
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
     font-size: 2vw;
     text-align: center;
 }

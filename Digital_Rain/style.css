@@ -20,6 +20,11 @@ Green: #008000
 Black: #000000
 */
 
+* {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     background-color: black;
     font-family: 'Open Sans', sans-serif;
@@ -30,16 +35,19 @@ body {
 
 .buttons {
     background-color: #001a09;
+    margin-top: 1vw;
     padding-top: 0.2vw;
     padding-bottom: 0.2vw;
     padding-left: 1vw;
     padding-right: 1vw;
+    outline: none;
     border: none;
     border-radius: 0.5vw;
     color: #99ffbb;
     font-size: 1.6vw;
     text-align: center;
     /* cursor: pointer; */
+    transition: all 0.4s ease-in-out;
 }
 
 .buttons:hover {

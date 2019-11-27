@@ -30,8 +30,6 @@ var dataController = (function() {
     // 글자들의 전체 집합을 설정
     var characters = ["길", "벼", "흐", "오", "랖", "オ", "サ", "ホ", "モ", "ヤ", "b", "m", "Q", "R", "y", "δ", "ε", "θ", "ψ", "η", "Б", "Ж", "Л", "Ю", "Я", "ठ", "त", "थ", "म", "ह", "խ", "ծ", "ջ", "տ", "ֆ", "ᚠ", "ᚱ", "ᛉ", "ᛒ", "ᛗ"];
 
-
-
     return {
         // Characters 배열을 return하는 함수
         getCharacters: function() {
@@ -51,6 +49,18 @@ var dataController = (function() {
             }
 
             return attached;
+        },
+
+        // 각 요소가 시간(ms)을 의미하는 배열 생성
+        getTimeArray: function(n) {
+            var timeArr = [];
+
+            for (var i = 0; i < n; i++) {
+                var rndTime = Math.floor(Math.random() * 10 + 1) * 100;
+                timeArr.push(rndTime);
+            }
+
+            return timeArr;
         },
         
         // arr 배열에서 무작위 글자를 n개 추출해 이어붙인 문장을 m열 추가
@@ -219,7 +229,9 @@ var appController = (function(dataCtrl, UICtrl) {
 
     // 모든 column의 highlight를 다음으로 옮기고, highlight의 맞춰 주변 element의 색상을 update함
     var updateHighlight = function() {
-        // playing === true인 경우에만 실행
+        // column 별 update time에 쓰일 timeArray 생성
+        var delayTime = dataCtrl.getTimeArray(characterMatrix.columns);
+        // playing === true인 경우에만 update
         if (playing) {
             for (var i = 1; i <= characterMatrix.columns; i++) {
                 UICtrl.displayNewColumnHighlight(characterMatrix, i);
@@ -235,7 +247,7 @@ var appController = (function(dataCtrl, UICtrl) {
             updateHighlight();
 
             // 200ms 간격으로 반복
-            setInterval(updateHighlight, 250);
+            // setInterval(updateHighlight, 250);
 
             setEventListeners();
         },

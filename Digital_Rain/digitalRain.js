@@ -63,7 +63,7 @@ var dataController = (function() {
             return timeArr;
         },
         
-        // arr 배열에서 무작위 글자를 n개 추출해 이어붙인 문장을 m열 추가
+        // arr 배열에서 무작위 글자를 obj.columns개 추출해 이어붙인 문장을 obj.rows 줄만큼 추가
         getCharacterMatrix: function(arr, obj) {
             for (var i = 0; i < obj.rows; i++) {
                 var divClass = ' class="rows row_' + (i + 1);
@@ -83,6 +83,17 @@ var dataController = (function() {
             }
 
             return html;
+        },
+
+        // obj에서 무작위 요소를 선택하고 textContent를 arr의 무작위 내용으로 바꿈
+        changeRndChar: function(arr, obj) {
+            var rndRow = Math.floor(Math.random() * obj.rows + 1);
+            var rndCol = Math.floor(Math.random() * obj.columns + 1);
+            var rndChar = getRndElem(arr);
+
+            var rndId = 'r' + rndRow + 'c' + rndCol;
+            document.getElementById(rndId).textContent = rndChar;
+            // console.log('Element id ' + rndId + ' is changed to character ' + rndChar);
         }
     }
 })();
@@ -94,6 +105,22 @@ var UIController = (function() {
     };
 
     return {
+        // event 지점에 pulse wave 효과를 생성
+        // CSS style과 병행
+        // 참고: https://www.youtube.com/watch?v=0ShtNG7JrR8
+        makePulseEffect: function(event) {
+            var pulse = document.createElement('div');
+            pulse.setAttribute('class', 'pulse');
+            document.body.appendChild(pulse);
+
+            pulse.style.top = event.pageY + 'px';
+            pulse.style.left = event.pageX + 'px';
+
+            setTimeout(function() {
+                document.body.removeChild(pulse);
+            }, 3000);
+        },
+
         // r'row_n'c'col_m'의 id를 가진 DOM 개체의 textContent를 Char로 표시
         displayCharacters: function(row_n, col_m, char) {
             var elementId = '#r' + row_n + 'c' + col_m;
@@ -207,6 +234,8 @@ var appController = (function(dataCtrl, UICtrl) {
         document.getElementById('btn_play-stop').addEventListener('click', changePlayStatus);
 
         document.querySelector('body').addEventListener('click', updateHighlight);
+
+        document.addEventListener('click', UICtrl.makePulseEffect);
     };
 
     // playing 변수를 조절하고 버튼의 text를 바꾸는 함수
@@ -247,7 +276,10 @@ var appController = (function(dataCtrl, UICtrl) {
             updateHighlight();
 
             // 200ms 간격으로 반복
-            // setInterval(updateHighlight, 250);
+            setInterval(updateHighlight, 250);
+            // setInterval(function() {
+            //     dataCtrl.changeRndChar(characters, characterMatrix)
+            // }, 50);
 
             setEventListeners();
         },

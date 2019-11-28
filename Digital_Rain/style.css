@@ -105,3 +105,28 @@ body {
     /* black */
     color: #001a09;
 }
+
+.pulse {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 4vw;
+    height: 4vw;
+    border: 0.5vw solid;
+    border-color: #99ffbb;
+    border-radius: 50%;
+    animation-name: pulse_wave;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 3;
+}
+
+@keyframes pulse_wave {
+    0% {
+        width: 0;
+        height: 0;
+    }
+    100% {
+        width: 8vw;
+        height: 8vw;
+    }
+}

@@ -109,24 +109,27 @@ body {
 .pulse {
     position: absolute;
     transform: translate(-50%, -50%);
-    width: 4vw;
-    height: 4vw;
-    border: 0.5vw solid;
-    border-color: #99ffbb;
+    width: 3vw;
+    height: 3vw;
+    border: 0.2vw solid #99ffbb;
     border-radius: 50%;
     animation-name: pulse_wave;
-    animation-duration: 1s;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: 3;
+    animation-duration: 1.5s;
+    /* forwards makes the animation fixed to the final frame after the end */ 
+    animation-fill-mode: forwards;
+    /* ease-out makes the animation become slower toward the end */
+    animation-timing-function: ease-out;
 }
 
 @keyframes pulse_wave {
     0% {
         width: 0;
         height: 0;
+        opacity: 1;
     }
     100% {
-        width: 8vw;
-        height: 8vw;
+        width: 5vw;
+        height: 5vw;
+        opacity: 0;
     }
 }

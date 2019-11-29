@@ -105,20 +105,32 @@ var UIController = (function() {
     };
 
     return {
-        // event 지점에 pulse wave 효과를 생성
+        // event 지점에 pulse를 delay 간격으로 count 개만큼 생성
         // CSS style과 병행
         // 참고: https://www.youtube.com/watch?v=0ShtNG7JrR8
-        makePulseEffect: function(event) {
-            var pulse = document.createElement('div');
-            pulse.setAttribute('class', 'pulse');
-            document.body.appendChild(pulse);
+        makeMultiPulseEffect: function(count, delay) {
 
-            pulse.style.top = event.pageY + 'px';
-            pulse.style.left = event.pageX + 'px';
+            var makePulse = function(delay) {
+                var eventX = event.pageX;
+                var eventY = event.pageY;
+                
+                setTimeout(function() {
+                    var pulse = document.createElement('div');
+                    pulse.setAttribute('class', 'pulse');
+                    document.body.appendChild(pulse);
+        
+                    pulse.style.top = eventY + 'px';
+                    pulse.style.left = eventX + 'px';
+            
+                    setTimeout(function() {
+                        document.body.removeChild(pulse);
+                    }, delay + 2000);
+                }, delay)
+            };
 
-            setTimeout(function() {
-                document.body.removeChild(pulse);
-            }, 3000);
+            for (var i = 0; i < count; i++) {
+                makePulse(0 + delay * i);
+            };
         },
 
         // r'row_n'c'col_m'의 id를 가진 DOM 개체의 textContent를 Char로 표시
@@ -235,7 +247,9 @@ var appController = (function(dataCtrl, UICtrl) {
 
         document.querySelector('body').addEventListener('click', updateHighlight);
 
-        document.addEventListener('click', UICtrl.makePulseEffect);
+        document.addEventListener('click', function() {
+            UICtrl.makeMultiPulseEffect(3, 250);
+        });
     };
 
     // playing 변수를 조절하고 버튼의 text를 바꾸는 함수

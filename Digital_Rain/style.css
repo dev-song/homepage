@@ -20,6 +20,11 @@ Green: #008000
 Black: #000000
 */
 
+
+/****************************
+************ Global
+****************************/
+
 * {
     margin: 0;
     padding: 0;
@@ -33,13 +38,50 @@ body {
     text-align: center;
 }
 
+/* onClick effect */
+.pulse {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 3vw;
+    height: 3vw;
+    border: 0.2vw solid #99ffbb;
+    border-radius: 50%;
+    animation-name: pulse_wave;
+    animation-duration: 1.5s;
+    /* forwards makes the animation fixed to the final frame after the end */ 
+    animation-fill-mode: forwards;
+    /* ease-out makes the animation become slower toward the end */
+    animation-timing-function: ease-out;
+}
+
+@keyframes pulse_wave {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        width: 5vw;
+        height: 5vw;
+        opacity: 0;
+    }
+}
+
+/****************************
+************ Header
+****************************/
+
+.buttons-bar {
+    margin-top: 0.2vw;
+    margin-bottom: -0.2vw;
+    padding-right: 2vw;
+    text-align: center;
+}
+
 .buttons {
+    /* display: inline-block; */
     background-color: #001a09;
-    margin-top: 1vw;
-    padding-top: 0.2vw;
-    padding-bottom: 0.2vw;
-    padding-left: 1vw;
-    padding-right: 1vw;
+    padding: 0.2vw 0.5vw 0.2vw 0.5vw;
     outline: none;
     border: none;
     border-radius: 0.5vw;
@@ -55,6 +97,9 @@ body {
     color: #001a09;
 }
 
+/****************************
+************ Main (Wrapper)
+****************************/
 .rows {
     padding: auto;
     margin: auto;
@@ -68,6 +113,7 @@ body {
     margin-left: 0.5vw;
     margin-right: 0.5vw;
     font-size: 2vw;
+    text-shadow: #99ffbb 0 0 1.2vw; 
     text-align: center;
 }
 
@@ -106,30 +152,3 @@ body {
     color: #001a09;
 }
 
-.pulse {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    width: 3vw;
-    height: 3vw;
-    border: 0.2vw solid #99ffbb;
-    border-radius: 50%;
-    animation-name: pulse_wave;
-    animation-duration: 1.5s;
-    /* forwards makes the animation fixed to the final frame after the end */ 
-    animation-fill-mode: forwards;
-    /* ease-out makes the animation become slower toward the end */
-    animation-timing-function: ease-out;
-}
-
-@keyframes pulse_wave {
-    0% {
-        width: 0;
-        height: 0;
-        opacity: 1;
-    }
-    100% {
-        width: 5vw;
-        height: 5vw;
-        opacity: 0;
-    }
-}

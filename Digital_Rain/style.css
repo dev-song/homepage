@@ -120,6 +120,12 @@ body {
 .highlighted {
     /* light green */
     color: #ffffff;
+    opacity: 1;
+}
+
+.changed {
+    color: #ffffff;
+    text-shadow: #ffffff 0 0 1.2vw;
 }
 
 .green_black {

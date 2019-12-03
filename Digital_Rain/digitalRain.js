@@ -92,6 +92,8 @@ var dataController = (function() {
             var rndId = 'r' + rndRow + 'c' + rndCol;
             document.getElementById(rndId).textContent = rndChar;
             // console.log('Element id ' + rndId + ' is changed to character ' + rndChar);
+
+            return rndId;
         }
     }
 })();
@@ -266,10 +268,24 @@ var appController = (function(dataCtrl, UICtrl) {
         }
     };
 
+    // 무작위 글자의 내용을 바꾸고, 해당 글자를 일정 시간 동안 강조 표시함
+    var updateRndChar = function(delay, duration) {
+        setInterval(function() {
+            var rndId = dataCtrl.changeRndChar(characters, characterMatrix);
+            document.getElementById(rndId).classList.add('changed');
+            document.getElementById(rndId).style.opacity = 1;
+            console.log('Element ID ' + rndId + ' is changed');
+
+            setTimeout(function() {
+                document.getElementById(rndId).classList.remove('changed');
+            }, duration);
+        }, delay);
+    };
+
     // setInterval 사용, 일정 주기로 update
     var repeatUpdate = setInterval(function() {
         updateHighlight(characterMatrix);
-    }, 250);
+    }, 500);
     
     // clearInterval로 setInterval 중지시키기
     var stopRepeat = function(interval) {
@@ -282,11 +298,7 @@ var appController = (function(dataCtrl, UICtrl) {
             UICtrl.setInitialHighlight(characterMatrix);
 
             // 일정 간격으로 반복
-            // repeatUpdate;
-            // setInterval(updateHighlight, 250);
-            // setInterval(function() {
-            //     dataCtrl.changeRndChar(characters, characterMatrix)
-            // }, 50);
+            updateRndChar(200, 1000);
 
             setEventListeners();
         },

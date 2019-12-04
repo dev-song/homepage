@@ -182,14 +182,17 @@ var UIController = (function() {
                 var targetId = 'r' + i + 'c' + col;
                 var targetDOM = document.getElementById(targetId);
 
+                // 현재 element가 changed 상태가 아닌 경우 opacity 조절
                 // 현재 row가 hlRow 위일 경우 row마다 0.1씩 opacity 감소, 최저치는 0.1
                 // hlRow 아래라면 opacity = 0
-                if (hlRow < 10 && i > obj.rows - 10) {
-                    targetDOM.style.opacity = Math.max(0, 1 - (obj.rows + hlRow - i) * 0.1);
-                } else if (i - hlRow <= 0) {
-                    targetDOM.style.opacity = Math.max(0, 1 - (hlRow - i) * 0.1);
-                } else {
-                    targetDOM.style.opacity = 0;
+                if(!targetDOM.classList.contains('changed')) {
+                    if (hlRow < 10 && i > obj.rows - 10) {
+                        targetDOM.style.opacity = Math.max(0, 1 - (obj.rows + hlRow - i) * 0.1);
+                    } else if (i - hlRow <= 0) {
+                        targetDOM.style.opacity = Math.max(0, 1 - (hlRow - i) * 0.1);
+                    } else {
+                        targetDOM.style.opacity = 0;
+                    }
                 }
             }
         }    
@@ -273,7 +276,6 @@ var appController = (function(dataCtrl, UICtrl) {
         setInterval(function() {
             var rndId = dataCtrl.changeRndChar(characters, characterMatrix);
             document.getElementById(rndId).classList.add('changed');
-            document.getElementById(rndId).style.opacity = 1;
             console.log('Element ID ' + rndId + ' is changed');
 
             setTimeout(function() {
@@ -285,7 +287,7 @@ var appController = (function(dataCtrl, UICtrl) {
     // setInterval 사용, 일정 주기로 update
     var repeatUpdate = setInterval(function() {
         updateHighlight(characterMatrix);
-    }, 500);
+    }, 400);
     
     // clearInterval로 setInterval 중지시키기
     var stopRepeat = function(interval) {
@@ -298,7 +300,7 @@ var appController = (function(dataCtrl, UICtrl) {
             UICtrl.setInitialHighlight(characterMatrix);
 
             // 일정 간격으로 반복
-            updateRndChar(200, 1000);
+            updateRndChar(400, 1000);
 
             setEventListeners();
         },

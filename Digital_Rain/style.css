@@ -113,7 +113,7 @@ body {
     margin-left: 0.5vw;
     margin-right: 0.5vw;
     font-size: 2vw;
-    text-shadow: #99ffbb 0 0 1.2vw; 
+    text-shadow: #99ffbb 0 0 1.5vw; 
     text-align: center;
 }
 
@@ -124,8 +124,30 @@ body {
 }
 
 .changed {
-    color: #ffffff;
-    text-shadow: #ffffff 0 0 1.2vw;
+    animation-name: refresh;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out;
+}
+
+/* 불투명 굵은 흰 글자 -> 투명 일반 연록 글자 */
+@keyframes refresh {
+    0% {
+        color: #ffffff;
+        text-shadow: #ffffff 0 0 1.2vw;
+        font-weight: 700;
+        opacity: 1;
+    }
+    60% {
+        font-weight: 700;
+        opacity: 0.6;
+    }
+    100% {
+        color: #99ffbb;
+        text-shadow: #99ffbb 0 0 1.2vw;
+        font-weight: 400;
+        opacity: 0.2;
+    }
 }
 
 .green_black {

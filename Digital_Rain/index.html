@@ -9,7 +9,7 @@
 
     <body>
         <div class="buttons-bar">
-                <button class="buttons" id="btn_play-stop">Start</button>
+                <button class="buttons button-initial" id="btn_play-stop">Start</button>
         </div>
         <div class="wrapper"></div>
 
@@ -37,8 +37,9 @@
     수정 필요
     - 모바일 대응
     - 리팩토링
-        > ctrlColumnColor 색상 대신 opacity로 if else 구문 단순화 방안 모색
-        > start/stop 버튼과 setInterval 깔끔하게 연동시키기 (setInterval 자체를 변수에 집어넣으면 stopRepeat 연동은 잘 되는데 재시작을 안하고... setInterval을 함수 안에 집어넣으면 재시작은 잘 되는데 stopRepeat이 작동을 안 함)
+        > ctrlColumnOpacity 함수가 changed 클래스를 감지해야 작동하는 형태 단순화
+        > DOMstrings 객체 만들어 DOM element 정리하기
+        v start/stop 버튼과 setInterval 깔끔하게 연동시키기 (setInterval 자체를 변수에 집어넣으면 stopRepeat 연동은 잘 되는데 재시작을 안하고... setInterval을 함수 안에 집어넣으면 재시작은 잘 되는데 stopRepeat이 작동을 안 함)
 -->
 
 <!-- 
@@ -54,4 +55,7 @@
     - 글자 랜덤으로 바꾸기, 바뀔 때 색상 강조하기
     - 글자들 그림자 효과 좀 더 선명하게 보이게 하기
     - 글자 랜덤으로 바꿀 때 강조 효과 및 fade out 자연스럽게
+
+    완료한 리팩토링
+        - ctrlColumnColor 색상 대신 opacity로 if else 구문 단순화
 -->

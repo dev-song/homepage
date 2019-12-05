@@ -80,26 +80,34 @@ body {
 
 .buttons {
     /* display: inline-block; */
-    background-color: #001a09;
+    background-color: #99ffbb;
     padding: 0.2vw 0.5vw 0.2vw 0.5vw;
     outline: none;
     border: none;
     border-radius: 0.5vw;
-    color: #99ffbb;
+    color: #001a09;
     font-size: 1.6vw;
     text-align: center;
     /* cursor: pointer; */
-    transition: all 0.4s ease-in-out;
+    transition: step-end 0.4s ease-in-out;
 }
 
 .buttons:hover {
-    background-color: #99ffbb;
-    color: #001a09;
+    background-color: #001a09;
+    color: #99ffbb;
+}
+
+.button-initial {
+    margin-top: 20%;
 }
 
 /****************************
 ************ Main (Wrapper)
 ****************************/
+.wrapper {
+    display: block;
+}
+
 .rows {
     padding: auto;
     margin: auto;
@@ -125,7 +133,7 @@ body {
 
 .changed {
     animation-name: refresh;
-    animation-duration: 1s;
+    animation-duration: 1.2s;
     animation-fill-mode: forwards;
     animation-timing-function: ease-out;
 }
@@ -138,6 +146,10 @@ body {
         font-weight: 700;
         opacity: 1;
     }
+    40% {
+        color: #ffffff;
+        text-shadow: #ffffff 0 0 1.2vw;
+    }
     60% {
         font-weight: 700;
         opacity: 0.6;
@@ -146,7 +158,7 @@ body {
         color: #99ffbb;
         text-shadow: #99ffbb 0 0 1.2vw;
         font-weight: 400;
-        opacity: 0.2;
+        opacity: 0.1;
     }
 }
 

@@ -209,6 +209,19 @@ var appController = (function(dataCtrl, UICtrl) {
         columns: 24
     }
 
+    // setInterval을 멈춘 뒤 재시작하려면 멈춘 뒤 다시 setInterval을 지정해줘야 함
+    var repeatUpdate;
+    var stopRepeat = function(interval) {
+        clearInterval(interval);
+    };
+
+    // 무작위 글자의 내용을 바꾸고, 해당 글자를 일정 시간 동안 강조 표시함
+    var updateRndChar;
+
+    // 갱신 rate
+    var updateRate = 250;
+    var killDelay = 1200;
+
     var setEventListeners = function() {
         // playing 변수를 조절하는 event listener를 Start 버튼에 할당
         document.getElementById('btn_play-stop').addEventListener('click', changePlayStatus);
@@ -227,12 +240,29 @@ var appController = (function(dataCtrl, UICtrl) {
         if (playing) {
             playing = false;
             stopRepeat(repeatUpdate);
+            stopRepeat(updateRndChar);
             document.getElementById('btn_play-stop').textContent = 'Start';
             document.getElementById('btn_play-stop').style.opacity = 1;
             document.getElementById('btn_play-stop').style.zIndex = 1;
         } else {
             playing = true;
-            repeatUpdate;
+
+            document.querySelector('.wrapper').style.display = 'block'
+
+            repeatUpdate = setInterval(function() {
+                updateHighlight(characterMatrix);
+            }, updateRate);
+            updateRndChar = setInterval(function() {
+                var rndId = dataCtrl.changeRndChar(characters, characterMatrix);
+                document.getElementById(rndId).classList.add('changed');
+                // console.log('Element ID ' + rndId + ' is changed');
+        
+                setTimeout(function() {
+                    document.getElementById(rndId).classList.remove('changed');
+                }, killDelay);
+            }, updateRate);
+
+            document.getElementById('btn_play-stop').classList.remove('button-initial');
             document.getElementById('btn_play-stop').textContent = 'Stop';
             document.getElementById('btn_play-stop').style.opacity = 0.2;
             document.getElementById('btn_play-stop').style.zIndex = 10;
@@ -271,41 +301,14 @@ var appController = (function(dataCtrl, UICtrl) {
         }
     };
 
-    // 무작위 글자의 내용을 바꾸고, 해당 글자를 일정 시간 동안 강조 표시함
-    var updateRndChar = function(delay, duration) {
-        setInterval(function() {
-            var rndId = dataCtrl.changeRndChar(characters, characterMatrix);
-            document.getElementById(rndId).classList.add('changed');
-            console.log('Element ID ' + rndId + ' is changed');
-
-            setTimeout(function() {
-                document.getElementById(rndId).classList.remove('changed');
-            }, duration);
-        }, delay);
-    };
-
-    // setInterval 사용, 일정 주기로 update
-    var repeatUpdate = setInterval(function() {
-        updateHighlight(characterMatrix);
-    }, 400);
-    
-    // clearInterval로 setInterval 중지시키기
-    var stopRepeat = function(interval) {
-        clearInterval(interval);
-    };
-
     return {
         init: function() {
             dataCtrl.getCharacterMatrix(characters, characterMatrix);
             UICtrl.setInitialHighlight(characterMatrix);
 
-            // 일정 간격으로 반복
-            updateRndChar(400, 1000);
+            document.querySelector('.wrapper').style.display = 'none';
 
             setEventListeners();
-        },
-
-        stop: function() {
         }
     };
 })(dataController, UIController);

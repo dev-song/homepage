@@ -117,6 +117,7 @@ body {
 .characters {
     display: inline-block;
     width: 3vw;
+    height: 3.2vw;
     margin-top: 0.3vw;
     margin-bottom: 0.3vw;
     margin-left: 0.5vw;
@@ -201,7 +202,7 @@ body {
 @media (max-width: 480px) {
     #btn_play-stop {
         position: absolute;
-        bottom: 5%;
+        bottom: 2%;
         padding: 0.5vw 1vw 0.5vw 1vw;
         border-radius: 0.5vw;
         font-size: 2.5vw;
@@ -210,6 +211,7 @@ body {
     .characters {
         display: inline-block;
         width: 6vw;
+        height: 6.4vw;
         margin-top: 0.6vw;
         margin-bottom: 0.6vw;
         margin-left: 1vw;
@@ -232,6 +234,7 @@ body {
     .characters {
         display: inline-block;
         width: 2vw;
+        height: 2.1vw;
         margin-top: 0.1vw;
         margin-bottom: 0.1vw;
         margin-left: 0.2vw;

@@ -282,7 +282,7 @@ var appController = (function(dataCtrl, UICtrl) {
 
             document.getElementById('btn_play-stop').classList.remove('button-initial');
             document.getElementById('btn_play-stop').textContent = 'Stop';
-            document.getElementById('btn_play-stop').style.opacity = 0.2;
+            document.getElementById('btn_play-stop').style.opacity = 0.1;
             document.getElementById('btn_play-stop').style.zIndex = 10;
             document.getElementById('btn_play-stop').style.transform = 'scale(1)';
         }

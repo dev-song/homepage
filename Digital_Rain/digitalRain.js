@@ -220,6 +220,7 @@ var appController = (function(dataCtrl, UICtrl) {
 
     // 갱신 rate
     var updateRate = 250;
+    var updateCharRate = 150;
     var killDelay = 1200;
 
     var setEventListeners = function() {
@@ -235,6 +236,22 @@ var appController = (function(dataCtrl, UICtrl) {
         });
     };
 
+    // 현재 client의 width를 기준으로 columns를 결정하고, height와의 비율을 반영해 rows를 결정
+    var adjustCharMatrix = function(obj) {
+        w = window.innerWidth;
+        h = window.innerHeight;
+
+        if (w <= 480) {
+            obj.columns = 12;
+        } else if (w <= 1200 && w > 480) {
+            obj.columns = 24;
+        } else {
+            obj.columns = 40;
+        }
+
+        obj.rows = Math.floor(obj.columns * (h / w));
+    }
+
     // playing 변수를 조절하고 버튼의 text를 바꾸는 함수
     var changePlayStatus = function() {
         if (playing) {
@@ -244,6 +261,7 @@ var appController = (function(dataCtrl, UICtrl) {
             document.getElementById('btn_play-stop').textContent = 'Start';
             document.getElementById('btn_play-stop').style.opacity = 1;
             document.getElementById('btn_play-stop').style.zIndex = 1;
+
         } else {
             playing = true;
 
@@ -260,12 +278,13 @@ var appController = (function(dataCtrl, UICtrl) {
                 setTimeout(function() {
                     document.getElementById(rndId).classList.remove('changed');
                 }, killDelay);
-            }, updateRate);
+            }, updateCharRate);
 
             document.getElementById('btn_play-stop').classList.remove('button-initial');
             document.getElementById('btn_play-stop').textContent = 'Stop';
             document.getElementById('btn_play-stop').style.opacity = 0.2;
             document.getElementById('btn_play-stop').style.zIndex = 10;
+            document.getElementById('btn_play-stop').style.transform = 'scale(1)';
         }
         console.log('Play status changed; now playing: ' + playing);
     };
@@ -303,6 +322,7 @@ var appController = (function(dataCtrl, UICtrl) {
 
     return {
         init: function() {
+            adjustCharMatrix(characterMatrix);
             dataCtrl.getCharacterMatrix(characters, characterMatrix);
             UICtrl.setInitialHighlight(characterMatrix);
 

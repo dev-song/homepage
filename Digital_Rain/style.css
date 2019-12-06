@@ -72,33 +72,34 @@ body {
 ****************************/
 
 .buttons-bar {
-    margin-top: 0.2vw;
-    margin-bottom: -0.2vw;
-    padding-right: 2vw;
+    height: 1vw;
     text-align: center;
 }
 
 .buttons {
     /* display: inline-block; */
-    background-color: #99ffbb;
-    padding: 0.2vw 0.5vw 0.2vw 0.5vw;
+    background-color: #001a09;
     outline: none;
     border: none;
     border-radius: 0.5vw;
-    color: #001a09;
-    font-size: 1.6vw;
+    color: #99ffbb;
     text-align: center;
     /* cursor: pointer; */
-    transition: step-end 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
 }
 
 .buttons:hover {
-    background-color: #001a09;
-    color: #99ffbb;
+    background-color: #99ffbb;
+    color: #001a09;
 }
 
-.button-initial {
-    margin-top: 20%;
+#btn_play-stop {
+    position: absolute;
+    bottom: 5%;
+    padding: 0.2vw 0.5vw 0.2vw 0.5vw;
+    border-radius: 0.5vw;
+    font-size: 1.6vw;
+    transform: scale(2);
 }
 
 /****************************
@@ -132,23 +133,22 @@ body {
 }
 
 .changed {
-    animation-name: refresh;
+    animation-name: fade;
     animation-duration: 1.2s;
     animation-fill-mode: forwards;
     animation-timing-function: ease-out;
 }
 
 /* 불투명 굵은 흰 글자 -> 투명 일반 연록 글자 */
-@keyframes refresh {
+@keyframes fade {
     0% {
         color: #ffffff;
-        text-shadow: #ffffff 0 0 1.2vw;
         font-weight: 700;
+        text-shadow: #ffffff;
         opacity: 1;
     }
     40% {
         color: #ffffff;
-        text-shadow: #ffffff 0 0 1.2vw;
     }
     60% {
         font-weight: 700;
@@ -156,8 +156,8 @@ body {
     }
     100% {
         color: #99ffbb;
-        text-shadow: #99ffbb 0 0 1.2vw;
         font-weight: 400;
+        text-shadow: #99ffbb;
         opacity: 0.1;
     }
 }
@@ -192,3 +192,52 @@ body {
     color: #001a09;
 }
 
+
+
+/****************************
+************ Media Queries
+****************************/
+
+@media (max-width: 480px) {
+    #btn_play-stop {
+        position: absolute;
+        bottom: 5%;
+        padding: 0.5vw 1vw 0.5vw 1vw;
+        border-radius: 0.5vw;
+        font-size: 2.5vw;
+    }
+    
+    .characters {
+        display: inline-block;
+        width: 6vw;
+        margin-top: 0.6vw;
+        margin-bottom: 0.6vw;
+        margin-left: 1vw;
+        margin-right: 1vw;
+        font-size: 4.5vw;
+        text-shadow: #99ffbb 0 0 3.5vw; 
+        text-align: center;
+    }
+}
+
+@media (min-width: 1200px) {
+    #btn_play-stop {
+        position: absolute;
+        bottom: 2%;
+        padding: 0.1vw 0.2vw 0.1vw 0.2vw;
+        border-radius: 0.4vw;
+        font-size: 1.2vw;
+    }
+
+    .characters {
+        display: inline-block;
+        width: 2vw;
+        margin-top: 0.1vw;
+        margin-bottom: 0.1vw;
+        margin-left: 0.2vw;
+        margin-right: 0.2vw;
+        font-size: 1.5vw;
+        text-shadow: #99ffbb 0 0 1.2vw; 
+        text-align: center;
+    }
+}

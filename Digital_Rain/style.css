@@ -95,19 +95,21 @@ body {
 
 .status-initial {
     bottom: 10%;
-    transform: scale(2);
+    transform: translateX(-50%) scale(2);
 }
 
 .status-playing {
     bottom: 5%;
     opacity: 0.1;
     z-index: 10;
+    transform: translateX(-50%);
 }
 
 .status-stop {
     bottom: 5%;
     opacity: 1;
     z-index: 1;
+    transform: translateX(-50%);
 }
 
 #btn_play-stop {
@@ -115,6 +117,28 @@ body {
     padding: 0.2vw 0.5vw 0.2vw 0.5vw;
     border-radius: 0.5vw;
     font-size: 1.6vw;
+}
+
+.page-introduction {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    width: 80%;
+    color: #99ffbb;
+    font-size: 5vw;
+    opacity: 1;
+    transform: translate(-50%);
+}
+
+.button-instruction {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    width: 80%;
+    color: #99ffbb;
+    font-size: 3vw;
+    opacity: 1;
+    transform: translate(-50%);
 }
 
 /****************************
@@ -216,15 +240,15 @@ body {
 
 @media (max-width: 480px) {
     .status-initial {
-        bottom: 5%;
+        bottom: 10%;
     }
     
     .status-playing {
-        bottom: 2%;
+        bottom: 5%;
     }
     
     .status-stop {
-        bottom: 2%;
+        bottom: 5%;
     }
 
     #btn_play-stop {
@@ -232,6 +256,18 @@ body {
         padding: 0.5vw 1vw 0.5vw 1vw;
         border-radius: 0.5vw;
         font-size: 2.5vw;
+    }
+
+    .page-introduction {
+        top: 30%;
+        width: 60%;
+        font-size: 8vw;
+    }
+    
+    .button-instruction {
+        top: 45%;
+        width: 60%;
+        font-size: 5vw;
     }
     
     .characters {
@@ -285,6 +321,16 @@ body {
         padding: 0.1vw 0.2vw 0.1vw 0.2vw;
         border-radius: 0.4vw;
         font-size: 1.2vw;
+    }
+
+    .page-introduction {
+        top: 30%;
+        font-size: 5vw;
+    }
+    
+    .button-instruction {
+        top: 50%;
+        font-size: 3vw;
     }
 
     .characters {

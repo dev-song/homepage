@@ -267,6 +267,10 @@ var appController = (function(dataCtrl, UICtrl) {
             document.getElementById('btn_play-stop').classList.remove('status-initial');
             document.getElementById('btn_play-stop').classList.remove('status-stop');
             document.getElementById('btn_play-stop').classList.add('status-playing');
+
+            // 본문 글자 스타일 변경
+            document.querySelector('.page-introduction').style.opacity = 0.01;
+            document.querySelector('.button-instruction').style.opacity = 0.01;
         }
         console.log('Play status changed; now playing: ' + playing + '\n');
     };

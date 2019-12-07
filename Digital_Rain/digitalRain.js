@@ -1,7 +1,7 @@
 // 글자데이터를 다루는 dataController, 화면에 나타내는 UIController, 앱 전체의 기능을 담당하는 appController로 구분
 
 // 프로그램의 기능-------------
-// Start 버튼 (or 페이지 진입 시) init() 함수가 실행되고, 프로그램이 동작
+// Play 버튼 (or 페이지 진입 시) init() 함수가 실행되고, 프로그램이 동작
 // 각 row의 내용을 불러옴
 // 각 column별로 최초 시작지점을 random으로 정함
 // 각 row에서 i번째 column의 문자가 .current가 붙어있는지 확인
@@ -18,12 +18,6 @@ var getRndElem = function(arr) {
 
     return rndElem;
 };
-
-// id를 가진 요소의 position에 html 코드를 더하는 함수
-// var insertHTML = function(id, position, html) {
-//     // position은 'beforebegin', 'afterbegin', 'beforeend', 'afterend'의 4가지
-//     document.getElementById(id).insertAdjacentHTML(position, html);
-// };
 
 var dataController = (function() {
     
@@ -60,7 +54,7 @@ var dataController = (function() {
                 rndNumbers.push(rndNum);
             }
 
-            console.log(rndNumbers);
+            // console.log(rndNumbers);
             return rndNumbers;
         },
         
@@ -210,24 +204,16 @@ var appController = (function(dataCtrl, UICtrl) {
         columns: 24
     }
 
-    // setInterval을 멈춘 뒤 재시작하려면 멈춘 뒤 다시 setInterval을 지정해줘야 함
-    var repeatUpdate;
-
     // 무작위 글자의 내용을 바꾸고, 해당 글자를 일정 시간 동안 강조 표시함
     var updateRndChar;
 
     // 갱신 rate
-    var updateRate = 250;
     var updateCharRate = 150;
-    var killDelay = 1200;
+    var changeFocusTime = 1200;
 
     var setEventListeners = function() {
-        // playing 변수를 조절하는 event listener를 Start 버튼에 할당
+        // playing 변수를 조절하는 event listener를 Play/stop 버튼에 할당
         document.getElementById('btn_play-stop').addEventListener('click', changePlayStatus);
-
-        document.querySelector('.wrapper').addEventListener('click', function() {
-            updateHighlight(characterMatrix);
-        });
 
         document.querySelector('.wrapper').addEventListener('click', function() {
             UICtrl.makeMultiPulseEffect(3, 200);
@@ -250,44 +236,39 @@ var appController = (function(dataCtrl, UICtrl) {
         obj.rows = Math.floor(obj.columns * (h / w));
     }
 
-    // playing 변수를 조절하고 버튼의 text를 바꾸는 함수
+    // playing 변수를 조절하고 Play/stop 버튼의 style을 바꾸는 함수
     var changePlayStatus = function() {
-        if (playing) {
+        if (playing) {      // play 중 버튼을 누를 경우
             playing = false;
-            // clearInterval(repeatUpdate);
-            clearInterval(updateRndChar);
-            document.getElementById('btn_play-stop').textContent = 'Start';
-            document.getElementById('btn_play-stop').style.opacity = 1;
-            document.getElementById('btn_play-stop').style.zIndex = 1;
 
-        } else {
+            // 현재 설정된 모든 setInterval들을 멈춤
+            intervalArr.forEach(function(cur) {
+                clearInterval(cur);
+            });
+
+            // Play/stop 버튼 글자 및 스타일 변경
+            document.getElementById('btn_play-stop').textContent = 'Play';
+            document.getElementById('btn_play-stop').classList.remove('status-playing');
+            document.getElementById('btn_play-stop').classList.add('status-stop');
+
+        } else {    // play가 멈춘 상태에서 버튼을 누를 경우
             playing = true;
 
             document.querySelector('.wrapper').style.display = 'block'
 
-            // repeatUpdate = setInterval(function() {
-            //     updateHighlight(characterMatrix);
-            // }, updateRate);
-
+            // 새로이 setInterval을 설정
             updateHighlight(characterMatrix);
+            updateRndChar(characters, characterMatrix, updateCharRate, changeFocusTime)
+            console.log('Array contains intervals\' ID: \n');
+            console.log(intervalArr);
 
-            updateRndChar = setInterval(function() {
-                var rndId = dataCtrl.changeRndChar(characters, characterMatrix);
-                document.getElementById(rndId).classList.add('changed');
-                // console.log('Element ID ' + rndId + ' is changed');
-        
-                setTimeout(function() {
-                    document.getElementById(rndId).classList.remove('changed');
-                }, killDelay);
-            }, updateCharRate);
-
-            document.getElementById('btn_play-stop').classList.remove('button-initial');
+            // Play/stop 버튼 글자 및 스타일 변경
             document.getElementById('btn_play-stop').textContent = 'Stop';
-            document.getElementById('btn_play-stop').style.opacity = 0.1;
-            document.getElementById('btn_play-stop').style.zIndex = 10;
-            document.getElementById('btn_play-stop').style.transform = 'scale(1)';
+            document.getElementById('btn_play-stop').classList.remove('status-initial');
+            document.getElementById('btn_play-stop').classList.remove('status-stop');
+            document.getElementById('btn_play-stop').classList.add('status-playing');
         }
-        console.log('Play status changed; now playing: ' + playing);
+        console.log('Play status changed; now playing: ' + playing + '\n');
     };
 
     // 특정 열의 Highlight된 row를 찾는 함수
@@ -306,40 +287,61 @@ var appController = (function(dataCtrl, UICtrl) {
         return colHighlightRow;
     };
 
-    // obj의 모든 column의 highlight를 다음으로 옮기고, highlight의 맞춰 주변 element의 색상을 update함
-    var updateHighlight = function(obj) {
-        // column 별 update time에 쓰일 timeArray 생성
-        timeArray = dataCtrl.getRndNumArray(obj.columns, 100, 400, 50);
+    // 각 column별로 생성될 setInterval을 일괄적으로 관리할 배열 생성
+    intervalArr = [];
 
+    // obj의 모든 column을 서로 다른 주기로 update
+    var updateHighlight = function(obj) {
         document.querySelector('body').style.color = '#99ffbb'
 
-        // for (var i = 1; i <= obj.columns; i++) {
-        //     var hlRow = findColHighlight(obj, i);
-        //     UICtrl.displayNewHighlight(obj, i, hlRow);
-        //     // highlight를 갱신했으므로 hlRow 변수를 재설정
-        //     hlRow = findColHighlight(obj, i);
-        //     UICtrl.ctrlColumnOpacity(obj, i, hlRow);
-        // }
+        // column 별 update time에 쓰일 난수 배열 생성
+        columnUpdateRates = dataCtrl.getRndNumArray(obj.columns, 120, 400, 40);
 
         for (var i = 1; i <= obj.columns; i++) {
-            updateHighlightByColumn(obj, i);
+            updateColumnHighlight(obj, i, columnUpdateRates[i - 1]);
         }
-
-        console.log(intervalId);
+        // console.log(intervalArr);
     };
 
-    intervalId = [];
-
-    // obj의 모든 column의 highlight를 다음으로 옮기고, highlight의 맞춰 주변 element의 색상을 update함
-    var updateHighlightByColumn = function(obj, col) {
-        intervalId[col - 1] = setInterval(function() {
+    // 한 column의 highlight 클래스를 다음 row로 옮기고, highlight되지 않은 row의 색상을 일정 주기(time)로 update
+    var updateColumnHighlight = function(obj, col, time) {
+        intervalArr[col - 1] = setInterval(function() {
             var hlRow = findColHighlight(obj, col);
             UICtrl.displayNewHighlight(obj, col, hlRow);
             // highlight를 갱신했으므로 hlRow 변수를 재설정
             hlRow = findColHighlight(obj, col);
             UICtrl.ctrlColumnOpacity(obj, col, hlRow);
-        }, timeArray[col - 1]);
+        }, time);
     };
+
+    // obj의 무작위 글자를 charArr 중 한 글자로 일정 주기(updateRate)마다 교체하고, 일정 시간(duration) 동안 강조 표시함
+    var updateRndChar = function(charArr, obj, rate, duration) {
+        intervalArr[intervalArr.length] = setInterval(function() {
+            var rndId = dataCtrl.changeRndChar(charArr, obj);
+            document.getElementById(rndId).classList.add('changed');
+
+            setTimeout(function() {
+                document.getElementById(rndId).classList.remove('changed');
+            }, duration);
+        }, rate);
+    };
+
+    // var updateHighlightAllColumns = function(obj) {
+    //     document.querySelector('body').style.color = '#99ffbb'
+
+    //     // column 별 update time에 쓰일 timeArray 생성
+    //     columnUpdateRates = dataCtrl.getRndNumArray(obj.columns, 100, 400, 50);
+
+    //     for (var i = 1; i <= obj.columns; i++) {
+    //         intervalArr[i - 1] = setInterval(function() {
+    //             var hlRow = findColHighlight(obj, i);
+    //             UICtrl.displayNewHighlight(obj, i, hlRow);
+    //             // highlight를 갱신했으므로 hlRow 변수를 재설정
+    //             hlRow = findColHighlight(obj, i);
+    //             UICtrl.ctrlColumnOpacity(obj, i, hlRow);
+    //         }, columnUpdateRates[i - 1]);
+    //     }
+    // };
 
     return {
         init: function() {
@@ -347,6 +349,7 @@ var appController = (function(dataCtrl, UICtrl) {
             dataCtrl.getCharacterMatrix(characters, characterMatrix);
             UICtrl.setInitialHighlight(characterMatrix);
 
+            // Play 버튼을 누르기 전까지는 본문이 보이지 않게 함
             document.querySelector('.wrapper').style.display = 'none';
 
             setEventListeners();

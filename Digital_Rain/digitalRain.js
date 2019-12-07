@@ -51,16 +51,17 @@ var dataController = (function() {
             return attached;
         },
 
-        // 각 요소가 시간(ms)을 의미하는 배열 생성
-        getTimeArray: function(n) {
-            var timeArr = [];
+        // 길이 n의 난수 배열 생성 (최소값 min, 최대값 max, 단위 unit)
+        getRndNumArray: function(n, min, max, unit) {
+            var rndNumbers = [];
 
             for (var i = 0; i < n; i++) {
-                var rndTime = Math.floor(Math.random() * 10 + 1) * 100;
-                timeArr.push(rndTime);
+                var rndNum = Math.round(Math.random() * (max / unit) + (min / unit)) * unit;
+                rndNumbers.push(rndNum);
             }
 
-            return timeArr;
+            console.log(rndNumbers);
+            return rndNumbers;
         },
         
         // arr 배열에서 무작위 글자를 obj.columns개 추출해 이어붙인 문장을 obj.rows 줄만큼 추가
@@ -211,9 +212,6 @@ var appController = (function(dataCtrl, UICtrl) {
 
     // setInterval을 멈춘 뒤 재시작하려면 멈춘 뒤 다시 setInterval을 지정해줘야 함
     var repeatUpdate;
-    var stopRepeat = function(interval) {
-        clearInterval(interval);
-    };
 
     // 무작위 글자의 내용을 바꾸고, 해당 글자를 일정 시간 동안 강조 표시함
     var updateRndChar;
@@ -256,8 +254,8 @@ var appController = (function(dataCtrl, UICtrl) {
     var changePlayStatus = function() {
         if (playing) {
             playing = false;
-            stopRepeat(repeatUpdate);
-            stopRepeat(updateRndChar);
+            // clearInterval(repeatUpdate);
+            clearInterval(updateRndChar);
             document.getElementById('btn_play-stop').textContent = 'Start';
             document.getElementById('btn_play-stop').style.opacity = 1;
             document.getElementById('btn_play-stop').style.zIndex = 1;
@@ -267,9 +265,12 @@ var appController = (function(dataCtrl, UICtrl) {
 
             document.querySelector('.wrapper').style.display = 'block'
 
-            repeatUpdate = setInterval(function() {
-                updateHighlight(characterMatrix);
-            }, updateRate);
+            // repeatUpdate = setInterval(function() {
+            //     updateHighlight(characterMatrix);
+            // }, updateRate);
+
+            updateHighlight(characterMatrix);
+
             updateRndChar = setInterval(function() {
                 var rndId = dataCtrl.changeRndChar(characters, characterMatrix);
                 document.getElementById(rndId).classList.add('changed');
@@ -308,16 +309,36 @@ var appController = (function(dataCtrl, UICtrl) {
     // obj의 모든 column의 highlight를 다음으로 옮기고, highlight의 맞춰 주변 element의 색상을 update함
     var updateHighlight = function(obj) {
         // column 별 update time에 쓰일 timeArray 생성
-        // var delayTime = dataCtrl.getTimeArray(characterMatrix.columns);
+        timeArray = dataCtrl.getRndNumArray(obj.columns, 100, 400, 50);
+
         document.querySelector('body').style.color = '#99ffbb'
 
+        // for (var i = 1; i <= obj.columns; i++) {
+        //     var hlRow = findColHighlight(obj, i);
+        //     UICtrl.displayNewHighlight(obj, i, hlRow);
+        //     // highlight를 갱신했으므로 hlRow 변수를 재설정
+        //     hlRow = findColHighlight(obj, i);
+        //     UICtrl.ctrlColumnOpacity(obj, i, hlRow);
+        // }
+
         for (var i = 1; i <= obj.columns; i++) {
-            var hlRow = findColHighlight(obj, i);
-            UICtrl.displayNewHighlight(obj, i, hlRow);
-            // highlight를 갱신했으므로 hlRow 변수를 재설정
-            hlRow = findColHighlight(obj, i);
-            UICtrl.ctrlColumnOpacity(obj, i, hlRow);
+            updateHighlightByColumn(obj, i);
         }
+
+        console.log(intervalId);
+    };
+
+    intervalId = [];
+
+    // obj의 모든 column의 highlight를 다음으로 옮기고, highlight의 맞춰 주변 element의 색상을 update함
+    var updateHighlightByColumn = function(obj, col) {
+        intervalId[col - 1] = setInterval(function() {
+            var hlRow = findColHighlight(obj, col);
+            UICtrl.displayNewHighlight(obj, col, hlRow);
+            // highlight를 갱신했으므로 hlRow 변수를 재설정
+            hlRow = findColHighlight(obj, col);
+            UICtrl.ctrlColumnOpacity(obj, col, hlRow);
+        }, timeArray[col - 1]);
     };
 
     return {

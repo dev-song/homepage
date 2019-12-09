@@ -30,27 +30,17 @@ var dataController = (function() {
             return characters;
         },
 
-        // 배열 내 무작위 항목들을 n번 이어붙이는 함수
-        arrRndAttachment: function(arr, n) {
-            var attached;
-
-            // 결과물인 attached를 초기화
-            attached = "";
-            // attached에 무작위로 고른 항목들을 n번 더함
-            for (var i = 0; i < n; i++) {
-                var rndElem = getRndElem(arr);
-                attached += rndElem;
-            }
-
-            return attached;
-        },
-
         // 길이 n의 난수 배열 생성 (최소값 min, 최대값 max, 단위 unit)
         getRndNumArray: function(n, min, max, unit) {
             var rndNumbers = [];
 
+            // 인접한 값은 동일하지 않아야 함
             for (var i = 0; i < n; i++) {
                 var rndNum = Math.round(Math.random() * (max / unit) + (min / unit)) * unit;
+
+                while (rndNum === rndNumbers[i - 1]) {
+                    rndNum = Math.round(Math.random() * (max / unit) + (min / unit)) * unit;
+                }
                 rndNumbers.push(rndNum);
             }
 
@@ -128,24 +118,9 @@ var UIController = (function() {
             };
         },
 
-        // r'row_n'c'col_m'의 id를 가진 DOM 개체의 textContent를 Char로 표시
-        displayCharacters: function(row_n, col_m, char) {
-            var elementId = 'r' + row_n + 'c' + col_m;
-            document.getElementById(elementId).textContent = char;
-        },
-
-        changeElemText: function(button, conditionVar, textA, textB) {
-            if (conditionVar === true) {
-                button.textContent = textA;
-            } else {
-                button.textContent = textB;
-            }
-        },
-
-        // 총 m개의 column에 대해 각 column 별로 무작위 row의 요소에 .highlight 추가
+        // obj의 모든 column별로 무작위 row에 .highlight 클래스 추가
         setInitialHighlight: function(obj) {
             // id = r#c1, r#c2, ..., r#c16 (#: 무작위 행 번호)
-
             for (var i = 1; i <= obj.columns; i++) {
                 var rndRow = Math.floor(Math.random() * obj.rows + 1);
                 var rndId = 'r' + rndRow + 'c' + i;
@@ -172,19 +147,18 @@ var UIController = (function() {
         },
 
         // 특정 열에서 Highlight된 row와의 간격에 따라 opacity을 조절하는 함수
-        ctrlColumnOpacity: function(obj, col, hlRow) {
+        ctrlColumnOpacity: function(obj, col, hlRow, tailLength) {
             for (var i = 1; i <= obj.rows; i++) {
                 var targetId = 'r' + i + 'c' + col;
                 var targetDOM = document.getElementById(targetId);
 
                 // 현재 element가 changed 상태가 아닌 경우 opacity 조절
-                // 현재 row가 hlRow 위일 경우 row마다 0.1씩 opacity 감소, 최저치는 0.1
-                // hlRow 아래라면 opacity = 0
+                    // 각 row와 highlight의 간격, 글자들의 길이(tailLength)를 계산하여 opacity에 반영
                 if(!targetDOM.classList.contains('changed')) {
-                    if (hlRow < 10 && i > obj.rows - 10) {
-                        targetDOM.style.opacity = Math.max(0, 1 - (obj.rows + hlRow - i) * 0.1);
+                    if (hlRow < tailLength && i > obj.rows + hlRow - tailLength) {
+                        targetDOM.style.opacity = Math.max(0, 1 - (obj.rows + hlRow - i) * (1 / tailLength));
                     } else if (i - hlRow <= 0) {
-                        targetDOM.style.opacity = Math.max(0, 1 - (hlRow - i) * 0.1);
+                        targetDOM.style.opacity = Math.max(0, 1 - (hlRow - i) * (1 / tailLength));
                     } else {
                         targetDOM.style.opacity = 0;
                     }
@@ -211,6 +185,9 @@ var appController = (function(dataCtrl, UICtrl) {
     var updateCharRate = 150;
     var changeFocusTime = 1200;
 
+    // 이어지는 글자들의 길이
+    var tailLength = 12;
+
     var setEventListeners = function() {
         // playing 변수를 조절하는 event listener를 Play/stop 버튼에 할당
         document.getElementById('btn_play-stop').addEventListener('click', changePlayStatus);
@@ -236,7 +213,7 @@ var appController = (function(dataCtrl, UICtrl) {
         obj.rows = Math.floor(obj.columns * (h / w));
     }
 
-    // playing 변수를 조절하고 Play/stop 버튼의 style을 바꾸는 함수
+    // playing 변수를 조절하고 setIntervals를 멈추며, Play/stop 버튼의 style을 바꾸는 함수
     var changePlayStatus = function() {
         if (playing) {      // play 중 버튼을 누를 경우
             playing = false;
@@ -259,8 +236,6 @@ var appController = (function(dataCtrl, UICtrl) {
             // 새로이 setInterval을 설정
             updateHighlight(characterMatrix);
             updateRndChar(characters, characterMatrix, updateCharRate, changeFocusTime)
-            console.log('Array contains intervals\' ID: \n');
-            console.log(intervalArr);
 
             // Play/stop 버튼 글자 및 스타일 변경
             document.getElementById('btn_play-stop').textContent = 'Stop';
@@ -272,11 +247,11 @@ var appController = (function(dataCtrl, UICtrl) {
             document.querySelector('.page-introduction').style.opacity = 0.01;
             document.querySelector('.button-instruction').style.opacity = 0.01;
         }
-        console.log('Play status changed; now playing: ' + playing + '\n');
+        // console.log('Play status changed. Now playing status is ' + playing);
     };
 
     // 특정 열의 Highlight된 row를 찾는 함수
-    var findColHighlight = function(obj, col) {
+    var findColHighlightRow = function(obj, col) {
         var colHighlightRow;
 
         for (var i = 1; i <= obj.rows; i++) {
@@ -300,21 +275,22 @@ var appController = (function(dataCtrl, UICtrl) {
 
         // column 별 update time에 쓰일 난수 배열 생성
         columnUpdateRates = dataCtrl.getRndNumArray(obj.columns, 120, 400, 40);
+        // console.log('Array contains intervals\' ID: \n');
+        // console.log(intervalArr);
 
         for (var i = 1; i <= obj.columns; i++) {
             updateColumnHighlight(obj, i, columnUpdateRates[i - 1]);
         }
-        // console.log(intervalArr);
     };
 
     // 한 column의 highlight 클래스를 다음 row로 옮기고, highlight되지 않은 row의 색상을 일정 주기(time)로 update
     var updateColumnHighlight = function(obj, col, time) {
         intervalArr[col - 1] = setInterval(function() {
-            var hlRow = findColHighlight(obj, col);
+            var hlRow = findColHighlightRow(obj, col);
             UICtrl.displayNewHighlight(obj, col, hlRow);
             // highlight를 갱신했으므로 hlRow 변수를 재설정
-            hlRow = findColHighlight(obj, col);
-            UICtrl.ctrlColumnOpacity(obj, col, hlRow);
+            hlRow = findColHighlightRow(obj, col);
+            UICtrl.ctrlColumnOpacity(obj, col, hlRow, tailLength);
         }, time);
     };
 
@@ -329,23 +305,6 @@ var appController = (function(dataCtrl, UICtrl) {
             }, duration);
         }, rate);
     };
-
-    // var updateHighlightAllColumns = function(obj) {
-    //     document.querySelector('body').style.color = '#99ffbb'
-
-    //     // column 별 update time에 쓰일 timeArray 생성
-    //     columnUpdateRates = dataCtrl.getRndNumArray(obj.columns, 100, 400, 50);
-
-    //     for (var i = 1; i <= obj.columns; i++) {
-    //         intervalArr[i - 1] = setInterval(function() {
-    //             var hlRow = findColHighlight(obj, i);
-    //             UICtrl.displayNewHighlight(obj, i, hlRow);
-    //             // highlight를 갱신했으므로 hlRow 변수를 재설정
-    //             hlRow = findColHighlight(obj, i);
-    //             UICtrl.ctrlColumnOpacity(obj, i, hlRow);
-    //         }, columnUpdateRates[i - 1]);
-    //     }
-    // };
 
     return {
         init: function() {

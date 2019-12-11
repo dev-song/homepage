@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+
+        <title>The Structure of Webpage</title>
+    </head>
+
+    <!-- Dark background, light text body -->
+    <body class="text-center text-light bg-dark">
+
+        <div class="container w-100 h-100 d-flex flex-column justify-content-end">
+            <!-- header containing Navigation buttons -->
+            <header class="mb-auto p-2">
+                <nav class="navbar justify-content-center">
+                    <!-- current page is focused by '.nav-pills', '.active' -->
+                    <ul class="nav nav-pills">
+                      <li class="nav-item">
+                          <a class="nav-link text-dark bg-light active" href="index.html">Frontpage</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link text-light" href="info_html.html">HTML</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link text-light" href="info_css.html">CSS</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link text-light" href="info_js.html">JavaScript</a>
+                      </li>
+                    </ul>
+                </nav>
+            </header>
+
+            <!-- main part containing Contents (card form) -->
+            <main>
+                <h2>
+                    Modern webpages are made up of 3 core languages
+                </h2>
+                <h2 class="mb-5 d-none d-sm-block">
+                    - HTML, CSS, JavaScript -
+                </h2>
+
+                <section class="d-sm-flex justify-content-sm-between d-flex-column justify-content-center">
+                    <article class="card" style="width: 18rem">
+                        <div class="card-body">
+                            <h5 class="card-title">HTML</h5>
+                            <p class="card-text">
+                                The standard with which webpages are written.
+                            </p>
+                            <p class="card-text d-none d-sm-block">
+                                HTML is resposible for organizing the layout and structure of a webpage.
+                            </p>
+                        </div>
+                    </article>
+                    <article class="card" style="width: 18rem">
+                        <div class="card-body">
+                            <h5 class="card-title">CSS</h5>
+                            <p class="card-text">
+                                An acronym for 'Cascading Style Sheets'.
+                            </p>
+                            <p class="card-text d-none d-sm-block">
+                                CSS takes charge of styling, or changing the aesthetics of a webpage.
+                            </p>
+                        </div>
+                    </article>
+                    <article class="card" style="width: 18rem">
+                        <div class="card-body">
+                            <h5 class="card-title">JavaScript</h5>
+                            <p class="card-text">
+                                Webpages can be more dynamic with JavaScript.
+                            </p>
+                            <p class="card-text d-none d-sm-block">
+                                With its similarity to C, JavaScript is interpreted from top to bottom.
+                            </p>
+                        </div>
+                    </article>
+                </section>
+            </main>
+
+            <!-- footer mentioning problem set -->
+            <footer class="mt-auto">
+                <h6 class="border-top border-light p-2 d-none d-sm-block">
+                    Harvard CS50 Problem Set 5: Building webpages
+                </h6>
+            </footer>
+        </div>
+    </body>
+</html>

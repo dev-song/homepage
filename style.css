@@ -1,64 +1,115 @@
 /**********************
-*** General **********/
+******** General
+**********************/
 
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body {
     width: 100%;
     height: 100%;
     color: #ddd;
-    background-color: #444;
+    background-color: #333;
     font-family: Open Sans;
-    font-size: 16px;
-    position: relative;
-    height: 100vh;
-    font-weight: 1000;
 }
 
 a {
     /* block hyperlink style (color blue & underline) */
     text-decoration: none;
-    color: #ddd;
+    color: beige;
 }
 
-header {
+/**********************
+******** Header
+**********************/
+
+.header_wrapper {
     background-color: #777;
 }
 
-header h2 {
-    font-size: 2rem;
-    padding-top: 1rem;
-    padding-left: 2rem;
-    padding-bottom: 1rem;
+header {
+    display: flex;
+    width: 80%;
+    margin: auto;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 2vw;
 }
 
-header .nav-bar {
-    font-size: 1rem;
-    position: absolute;
-    right: 2rem;
-    top: 2.5rem;
+header .page_title {
+    font-size: 4vw;
+    padding: 1vw 0 1vw 0;
 }
 
-header .nav-bar li {
+nav ul {
+    display: flex;
     list-style-type: none;
-    float: left;
-    margin-left: 2rem;
 }
 
-.site-owner {
-    font-size: 4rem;
-    position: absolute;
-    left: 16rem;
-    top: 12rem;
+nav ul li {
+    margin: 1vw;
 }
 
-.owner-description {
-    font-size: 1rem;
-    position: absolute;
-    top: 10rem;
-    right: 16rem;
+/**********************
+******** Main
+**********************/
+
+main {
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+    margin: 4vw auto 4vw auto;
+    text-align: center;
+    font-size: 2vw;
+}
+
+.site_owner, .page_description {
+    width: 50%;
+    text-align: left;
+}
+
+.site_owner .owner_name {
+    margin: 0 2vw 0 2vw;
+    font-size: 4vw;
+}
+
+.site_owner .owner_intro {
+    margin: 2vw 0 2vw 0;
+}
+
+.page_description .example_code {
+    margin: 0 2vw 0 2vw;
+}
+
+.page_description .project_list {
+    margin: 2vw 0 2vw 0;
+}
+
+/**********************
+******** Media queries
+**********************/
+
+@media (max-width: 480px) {
+    header {
+        display: block;
+        font-size: 4vw;
+    }
+
+    header .page_title {
+        font-size: 8vw;
+    }
+
+    nav ul {
+        justify-content: flex-end;
+    }
+
+    main {
+        font-size: 4vw;
+    }
+
+    .site_owner .owner_name {
+        font-size: 8vw;
+    }
 }

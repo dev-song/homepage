@@ -3,40 +3,49 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600" rel="stylesheet" type="text/css">
         <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
         <link type="text/css" rel="stylesheet" href="style.css">
         <title>Dev_song Homepage</title>
     </head>
-    <body>
 
-        <div class="wrapper">
+    <body>
+        <div class="header_wrapper">
             <header>
-                <h2>Homepage</h2>
-                <ul class="nav-bar">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Portfolio</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
+                <h2 class="page_title">Homepage</h2>
+                <nav>
+                    <ul class="nav-bar">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Portfolio</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
             </header>
-            <section>
-                <div class="site-owner">
-                    <p>dev_</p>
-                    <p>song</p>
-                </div>
-                <div class="owner-description">
-                    <pre>
+        </div>
+        <div class="main_wrapper">
+            <main>
+                <section class="site_owner">
+                    <h3 class="owner_name">dev_</h3>
+                    <h3 class="owner_name">song</h3>
+                    <p class="owner_intro">An Apprentice Programmer</p>
+                </section>
+                <section class="page_description">
+                    <pre class="example_code">
 * {
-    margin: 0;
-    padding: 0;
+margin: 0;
+padding: 0;
 }
                     </pre>
-                    <p><a href="Digital_Rain/index.html" target="_blank">Project #1: Matrix-style Digital Rain</a></p>
-                </div>
-            </section>
+                    <div class="project_list">
+                        <p class="project_number">Project #1</p>
+                        <p class="project_name"><a href="digital_rain/digital_rain.html" target="_blank">Matrix-style Digital Rain</a></p>
+                    </div>
+                </section>
+            </main>
         </div>
-        
         <!-- <script src="app.js"></script> -->
     </body>
 </html>

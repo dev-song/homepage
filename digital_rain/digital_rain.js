@@ -2,6 +2,7 @@
 
 var playing;
 
+
 // 배열 내 무작위 항목을 선택하는 함수
 var getRndElem = function(arr) {
     var rndElem;

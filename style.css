@@ -87,6 +87,10 @@ main {
     margin: 2vw 0 2vw 0;
 }
 
+.project {
+    margin-bottom: 1vw;
+}
+
 /**********************
 ******** Media queries
 **********************/

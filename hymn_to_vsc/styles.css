@@ -9,7 +9,9 @@
 }
 
 body {
-    background-color: dimgray;
+    background-color: #111111;
+    font-family: 'Calibri';
+    font-size: 1rem;
 }
 
 /****************************
@@ -17,7 +19,21 @@ body {
 ****************************/
 
 header {
+    display: flex;
+    background-color: #333333;
+    color: #cccccc;
     text-align: center;
+}
+
+.program_icon {
+    display: flex;
+    align-items: center;
+}
+
+#vsc_icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0.75rem;
 }
 
 .menu {
@@ -25,14 +41,43 @@ header {
 }
 
 .menu-item {
-    margin: 1vw;
+    font-size: 1.25rem;
+    margin: 0.75rem;
 }
 
 /****************************
-************ Main (Wrapper)
+************ Main
 ****************************/
 
+main {
+    display: flex;
+    height: 90vh;
+}
 
+.activity_bar {
+    background-color: #333333;
+    width: 5%;
+}
+
+.side_bar {
+    background-color: #222222;
+    width: 20%;
+}
+
+.code_editor {
+    background-color: #333333;
+    width: 75%;
+}
+
+/****************************
+************ Footer
+****************************/
+
+.status_bar {
+    display: flex;
+    height: 1.25rem;
+    background-color: #222222;
+}
 
 /****************************
 ************ Media Queries

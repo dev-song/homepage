@@ -65,9 +65,26 @@ main {
     width: 20%;
 }
 
+.side_bar-title {
+    padding: 1rem;
+}
+
+.editor_list-title, .workspace-title {
+    background-color: #333333;
+    padding: 0.3rem;
+}
+
 .code_editor {
     background-color: #333333;
     width: 75%;
+}
+
+.code_editor-root {
+    padding: 0.3rem 0.3rem 0.3rem 1rem;
+}
+
+.code_editor-file, .code_editor-code {
+    padding: 1rem;
 }
 
 /****************************

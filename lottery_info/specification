@@ -1,0 +1,19 @@
+---------------------
+--- Webpage 'Lottery Info' Specification
+---------------------
+
+1. Responsive to Various screen sizes
+    - Width > Height screen (mainly PC screens)
+    - Height > Width screen (mainly Mobile screens)
+
+2. Webpage contents
+    - Shows 8 recent draws with draw numbers, and draw date
+    
+3-1. Automatic update of draw results
+    - Option 1) save to an offline file, update it automatically
+    - Option 2) crawl data from external draw result sources when the user visits the page
+
+3-2. Automatic check of update failures
+    - If Option 1/2 fails to get valid data, notice the owner
+
+4. Ad

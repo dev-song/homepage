@@ -59,13 +59,14 @@ for result in draw_result_info:
 # print(draw_result)
 
 # make a dictionary to transfer information to JSON file
-draw_info = {}
-draw_info[draw_date_yyyymmdd] = draw_result
-# print(draw_info)
+draw_info = []
+draw_info_obj = {'draw_date': draw_date_yyyymmdd, 'draw_numbers': draw_result}
+draw_info.insert(0, draw_info_obj)
+print(draw_info)
 
-with open('draw_record.json') as input_json:
+# with open('draw_record.json') as input_json:
     # get data from existing JSON file
-    previous_data = json.load(input_json)
+    # previous_data = json.load(input_json)
 
     # sort data in JSON file
 
@@ -74,6 +75,7 @@ with open('draw_record.json') as input_json:
     # return the boolean above
 
 # open JSON file again, in 'write' mode
+with open('draw_record.json', 'w') as output_json:
     # if boolean was true, don't write data
     # else, write data in JSON file
-        # json.dump(draw_info, output)
+        json.dump(draw_info, output_json)
